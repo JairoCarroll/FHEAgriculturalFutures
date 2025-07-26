@@ -1,0 +1,76 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Hardhat files
+cache/
+artifacts/
+typechain/
+typechain-types/
+
+# Coverage reports
+coverage/
+coverage.json
+.coverage_artifacts/
+.coverage_cache/
+.coverage_contracts/
+
+# Build outputs
+dist/
+build/
+
+# Deployment files (keep structure, ignore sensitive data)
+deployments/*.json
+!deployments/.gitkeep
+
+# Test outputs
+test-results/
+*.log
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Operating System files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
+tmp/
+
+# Hardhat ignition
+ignition/deployments/
+
+# Gas reports
+gas-report.txt
+
+# Solhint cache
+.solhint.json
+
+# Prettier cache
+.prettierrc.json
+
+# Local development
+localhost/
+local/
+
+# Backup files
+*.bak
+*.backup
+
+# Documentation build
+docs/.vuepress/dist/
