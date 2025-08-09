@@ -1,0 +1,13 @@
+{
+  "name": "private-agricultural-futures",
+  "version": "1.0.0",
+  "description": "Private Agricultural Futures Trading Platform",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Static build - no build required'",
+    "start": "npx http-server . -p 3000 -c-1 --cors"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
