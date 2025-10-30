@@ -169,6 +169,16 @@ The platform supports futures contracts for five major agricultural commodities:
 - **Code Coverage**: Codecov integration
 - **Security**: npm audit automation
 
+### 🆕 Frontend Application (React/Next.js)
+- **Framework**: Next.js 14 with App Router
+- **UI Library**: React 18 with TypeScript 5
+- **Styling**: Bootstrap 5 + Custom CSS (Cyberpunk theme)
+- **Blockchain Integration**: ethers.js v6 + fhevmjs v0.5
+- **State Management**: React Hooks (useState, useEffect, useCallback)
+- **Components**: 5 modular components (WalletConnect, CreateContract, TraderProfile, ContractsList, MarketData)
+- **Custom Hooks**: useWallet (wallet management), useContract (smart contract interactions)
+- **Type Safety**: Complete TypeScript coverage with interfaces and enums
+
 ## 🔐 Privacy Model - What's Private, What's Public
 
 ### 🔒 **Encrypted Data (Private)**
@@ -354,6 +364,8 @@ ETHERSCAN_API_KEY=your_etherscan_api_key
 
 ### Development Commands
 
+#### Smart Contract Development
+
 ```bash
 # Compile contracts
 npm run compile
@@ -392,6 +404,43 @@ npm run interact
 npm run simulate
 ```
 
+#### 🆕 React/Next.js Frontend Application
+
+Run the web application for a user-friendly interface:
+
+```bash
+# Navigate to frontend directory
+cd private-agricultural-futures
+
+# Install dependencies
+npm install
+
+# Configure contract address
+# Edit src/lib/constants.ts and set CONTRACT_ADDRESS
+
+# Run development server
+npm run dev
+# Open http://localhost:3000
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Lint code
+npm run lint
+```
+
+**Frontend Features:**
+- 🎨 **Cyberpunk-themed UI** with neon colors and modern design
+- 🦊 **MetaMask Integration** for wallet connection
+- 📝 **Contract Creation Form** with 5 crop types (Wheat, Rice, Corn, Soybeans, Cotton)
+- 👤 **Trader Dashboard** showing stats and balance management
+- 📋 **Contract Management** with confirm/settle/cancel operations
+- 📊 **Market Statistics** displaying volumes for all commodities
+- 🔐 **Full FHE Support** for encrypted trading operations
+
 ## 📦 Project Structure
 
 ```
@@ -405,6 +454,44 @@ FHEAgriculturalFutures/
 │   └── simulate.js                       # Automated simulation
 ├── test/
 │   └── PrivateAgriculturalFutures.test.js # 69 comprehensive tests
+├── private-agricultural-futures/         # 🆕 React/Next.js Web Application
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── layout.tsx                # Root layout with metadata
+│   │   │   ├── page.tsx                  # Main application page
+│   │   │   └── globals.css               # Global styles (cyberpunk theme)
+│   │   ├── components/
+│   │   │   ├── WalletConnect.tsx         # MetaMask wallet integration
+│   │   │   ├── CreateContract.tsx        # Futures contract creation form
+│   │   │   ├── TraderProfile.tsx         # Trader statistics dashboard
+│   │   │   ├── ContractsList.tsx         # Contract management interface
+│   │   │   └── MarketData.tsx            # Market statistics display
+│   │   ├── hooks/
+│   │   │   ├── useWallet.ts              # Wallet connection & management
+│   │   │   └── useContract.ts            # Smart contract interactions
+│   │   └── lib/
+│   │       ├── types.ts                  # TypeScript type definitions
+│   │       ├── constants.ts              # App constants & contract ABI
+│   │       └── utils.ts                  # Utility functions
+│   ├── contracts/                        # Solidity contracts (reference)
+│   ├── public/                           # Static HTML version (legacy)
+│   ├── package.json                      # React/Next.js dependencies
+│   ├── tsconfig.json                     # TypeScript configuration
+│   ├── next.config.js                    # Next.js configuration
+│   └── README.md                         # Frontend documentation
+├── fhevm-react-template/                 # 🆕 Universal FHEVM SDK
+│   ├── packages/
+│   │   └── fhevm-sdk/                    # Framework-agnostic SDK
+│   │       ├── src/
+│   │       │   ├── core/                 # Core FHE services
+│   │       │   ├── react/                # React hooks & providers
+│   │       │   ├── types/                # TypeScript definitions
+│   │       │   └── helpers/              # Utility functions
+│   │       └── package.json              # SDK dependencies
+│   └── examples/                         # Example integrations
+│       ├── nextjs-example/               # Next.js SDK demo
+│       ├── nodejs-example/               # Node.js CLI demo
+│       └── agricultural-futures/         # Hardhat example
 ├── .github/
 │   └── workflows/                        # CI/CD pipelines
 │       ├── test.yml                      # Automated testing
@@ -456,6 +543,104 @@ Network: Sepolia Testnet
 Chain ID: 11155111
 Block Explorer: https://sepolia.etherscan.io/address/0x3aA0E7401D4992423A77390e529598e805196ba4
 ```
+
+## 🆕 FHEVM Universal SDK
+
+This repository includes a **framework-agnostic FHEVM SDK** that simplifies integration of Fully Homomorphic Encryption into any JavaScript/TypeScript project.
+
+### SDK Features
+
+**Core Capabilities:**
+- ✅ **Framework-agnostic** - Works with React, Vue, Next.js, Node.js, or vanilla JavaScript
+- ✅ **Type-safe** - Complete TypeScript support with full type definitions
+- ✅ **Modular** - Import only what you need
+- ✅ **Wagmi-like API** - Familiar interface for Web3 developers
+- ✅ **React Hooks** - useFhevm(), useEncryption(), useDecryption(), useContract()
+
+**SDK Structure:**
+```
+fhevm-sdk/
+├── core/                    # Framework-agnostic core
+│   ├── FhevmClient.ts      # Main client class
+│   ├── EncryptionService.ts # Encryption operations
+│   ├── DecryptionService.ts # Decryption operations
+│   └── ContractService.ts   # Smart contract interactions
+├── react/                   # React integration
+│   ├── FhevmProvider.tsx   # Context provider
+│   └── hooks/              # React hooks (6 hooks)
+├── types/                   # TypeScript definitions
+└── helpers/                 # Utility functions
+```
+
+### Using the SDK
+
+**Vanilla JavaScript/TypeScript:**
+```typescript
+import { createFhevmClient } from 'fhevm-sdk';
+
+const client = await createFhevmClient({
+  network: {
+    chainId: 11155111,
+    rpcUrl: 'YOUR_RPC_URL',
+    gatewayUrl: 'https://gateway.fhevm.io'
+  }
+});
+
+// Encrypt values
+const encrypted = await client.encryption.encryptValue(42, 'uint32');
+
+// Decrypt values
+const decrypted = await client.decryption.userDecrypt(contractAddress, handle);
+```
+
+**React Integration:**
+```tsx
+import { FhevmProvider, useFhevm, useEncryption } from 'fhevm-sdk/react';
+
+function App() {
+  return (
+    <FhevmProvider config={{ network: { chainId: 11155111 } }}>
+      <YourComponent />
+    </FhevmProvider>
+  );
+}
+
+function YourComponent() {
+  const { client, isInitialized } = useFhevm();
+  const { encrypt, isEncrypting } = useEncryption();
+
+  const handleEncrypt = async () => {
+    const encrypted = await encrypt(100, 'uint32');
+  };
+
+  return <button onClick={handleEncrypt}>Encrypt</button>;
+}
+```
+
+### SDK Examples
+
+The repository includes **4 complete example applications**:
+
+1. **nextjs-example** - Full-featured Next.js app with API routes, UI components, and FHE demos
+2. **private-agricultural-futures** - Complete trading platform (this application)
+3. **nodejs-example** - CLI tool for backend/server-side usage
+4. **agricultural-futures** - Hardhat project with smart contract integration
+
+**Quick Start with SDK:**
+```bash
+cd fhevm-react-template
+
+# Build the SDK
+npm run build:sdk
+
+# Run Next.js example
+npm run dev:nextjs
+
+# Run Node.js CLI
+npm run dev:nodejs
+```
+
+For complete SDK documentation, see: `fhevm-react-template/packages/fhevm-sdk/README.md`
 
 ## 🎯 Contract Interaction
 
