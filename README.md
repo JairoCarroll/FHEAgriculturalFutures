@@ -86,19 +86,27 @@ The platform supports futures contracts for five major agricultural commodities:
 
 🌾 **Multi-Commodity Support**: Trade futures for WHEAT, RICE, CORN, SOYBEANS, and COTTON with complete privacy
 
-🤝 **Two-Party Confirmation**: Secure buyer-seller mutual confirmation system before settlement
+��� **Two-Party Confirmation**: Secure buyer-seller mutual confirmation system before settlement
 
 ⏱️ **Automated Settlement**: 30-day settlement period with automatic execution and encrypted value transfer
+
+🔄 **Gateway Callback Mode**: 🆕 **NEW** Asynchronous decryption processing through ZAMA Gateway for enhanced scalability and user experience
+
+🛡️ **Timeout Protection**: 🆕 **NEW** 7-day automatic timeout protection prevents permanent fund locking with automatic refund mechanisms
+
+💰 **Refund Mechanism**: 🆕 **NEW** Comprehensive refund system for decryption failures and timeout scenarios protecting user funds
+
+🔒 **Enhanced Security**: 🆕 **NEW** Input validation, access control, overflow protection, and audit-ready security architecture
 
 📊 **Private Market Analytics**: View aggregated market data without exposing individual trading positions
 
 🔄 **Flexible Contract Management**: Create, confirm, settle, or cancel contracts with full confidentiality
 
-🛡️ **DoS Protection**: Built-in gas limits and security checks to prevent denial-of-service attacks
-
 ✅ **Comprehensive Testing**: 69 test cases with 100% coverage, multi-version CI/CD pipeline
 
-## 🏗️ Architecture
+## 🏗️ Enhanced Architecture
+
+### 🆕 Gateway Callback Mode & Protection Mechanisms
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -108,31 +116,50 @@ The platform supports futures contracts for five major agricultural commodities:
                         │
                         ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              Smart Contract Layer (Solidity)                 │
+│              Enhanced Smart Contract Layer                   │
 │                                                               │
 │  ┌──────────────────────────────────────────────────────┐   │
-│  │  PrivateAgriculturalFutures Contract                  │   │
+│  │  PrivateAgriculturalFutures Contract (Enhanced)      │   │
 │  │                                                        │   │
-│  │  • createFuturesContract()  • confirmContract()       │   │
-│  │  • settleContract()         • cancelContract()        │   │
-│  │  • depositBalance()         • updateMarketPrice()     │   │
+│  │  • createFuturesContract()     • confirmContract()    │   │
+│  │  • settleContract()            • cancelContract()     │   │
+│  │  • requestContractDecryption()  🆕 NEW                │   │
+│  │  • checkTimeoutProtection()    🆕 NEW                │   │
+│  │  • claimTimeoutRefund()        🆕 NEW                │   │
+│  │  • gatewayDecryptionCallback() 🆕 NEW                │   │
 │  └──────────────────────────────────────────────────────┘   │
 │                                                               │
 │  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐   │
-│  │  Encrypted   │  │  Encrypted   │  │   Encrypted      │   │
-│  │  Quantities  │  │   Prices     │  │   Balances       │   │
-│  │  (euint32)   │  │  (euint64)   │  │   (euint64)      │   │
+│  │  Encrypted   │  │  Encrypted   │  │   Timeout        │   │
+│  │  Quantities  │  │   Prices     │  │  Protection      │   │
+│  │  (euint32)   │  │  (euint64)   │  │   (7 days)      │   │
+│  └─────────────┘  └──────────────┘  └──────────────────┘   │
+│                                                               │
+│  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐   │
+│  │   Refund     │  │   Access     │  │   Input          │   │
+│  │  Mechanism   │  │   Control    │  │  Validation      │   │
+│  │   (NEW)      │  │   (NEW)      │  │     (NEW)        │   │
 │  └─────────────┘  └──────────────┘  └──────────────────┘   │
 └───────────────────────┬─────────────────────────────────────┘
                         │
+                        ▼ Async Processing
+┌─────────────────────────────────────────────────────────────┐
+│                ZAMA Gateway Service                          │
+│                                                               │
+│  • Asynchronous decryption processing                        │   │
+│  • Automatic timeout detection                              │   │
+│  • Cryptographic proof verification                         │   │
+│  • Callback-based completion                                 │   │
+└───────────────────────┬─────────────────────────────────────┘
+                        │ Callback
                         ▼
 ┌─────────────────────────────────────────────────────────────┐
 │          Zama fhEVM - Fully Homomorphic Encryption           │
 │                                                               │
 │  • Encrypted computations on encrypted data                  │
-│  • No decryption during operations                           │
+│  • Gateway callback integration                              │
 │  • Privacy-preserving smart contract execution               │
-│  • Supports arithmetic operations on encrypted values        │
+│  • Timeout and refund protection                             │
 └───────────────────────┬─────────────────────────────────────┘
                         │
                         ▼
@@ -141,6 +168,52 @@ The platform supports futures contracts for five major agricultural commodities:
 │                                                               │
 │  Contract: 0x3aA0E7401D4992423A77390e529598e805196ba4        │
 │  Network: Sepolia Testnet (Chain ID: 11155111)               │
+│  Features: Enhanced security & user protection               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🔄 Enhanced Contract Lifecycle
+
+```
+1. Contract Creation (with security validation)
+   ↓
+2. Two-Party Confirmation
+   ↓
+3. Settlement Period (30 days)
+   ↓
+4. Gateway Decryption Request (NEW)
+   ↓
+5. Asynchronous Processing (7-day timeout protection)
+   ├── Success: Gateway Callback → Settlement Complete
+   └── Failure: Timeout Trigger → Refund Available
+```
+
+### 🛡️ Protection Mechanisms
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Security & Protection                      │
+│                                                               │
+│  🔒 Input Validation:                                        │
+│     • Contract value limits (≤1000 ETH)                     │
+│     • Quantity ranges (1-1,000,000 tons)                    │
+│     • Address validation (zero address protection)          │
+│     • Minimum stake requirements (≥0.001 ETH)              │
+│                                                               │
+│  🛡️ Access Control:                                          │
+│     • Role-based permissions                                │
+│     • Contract party restrictions                           │
+│     • Owner-only functions                                  │
+│                                                               │
+│  ⏱️ Timeout Protection:                                      │
+│     • 7-day decryption timeout                              │
+│     • Automatic refund triggering                           │
+│     • Manual override capabilities                          │
+│                                                               │
+│  💰 Refund Mechanism:                                        │
+│     • Stake return on timeout                               │
+│     • Split between buyer and seller                        │
+│     • Double-claim prevention                               │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -820,6 +893,139 @@ All files           |     100 |      100 |     100 |     100 |
 ```
 
 📖 **For detailed testing documentation, see [TESTING.md](./TESTING.md)**
+
+## 🆕 Enhanced Features Deep Dive
+
+### 🔄 Gateway Callback Mode
+
+**What it solves:** Traditional blockchain transactions block until complete, creating poor user experience for complex FHE operations.
+
+**How it works:**
+1. **User submits encrypted request** → Contract records request immediately
+2. **Gateway processes asynchronously** → No blocking, user can continue other operations
+3. **Gateway calls back with results** → Contract completes settlement automatically
+4. **Built-in timeout protection** → Automatic refund if Gateway fails to respond
+
+**Benefits:**
+- ✅ **Non-blocking user experience** - No waiting for decryption
+- ✅ **Scalable architecture** - Gateway handles batch processing
+- ✅ **Reliable completion** - Callback ensures settlement happens
+- ✅ **Timeout protection** - Users protected from Gateway failures
+
+```javascript
+// User experience flow
+const tx = await contract.requestContractDecryption(contractId);
+await tx.wait(); // Immediate return - no blocking
+
+// Listen for completion
+contract.on('GatewayCallbackCompleted', (contractId) => {
+    console.log(`Contract ${contractId} settled successfully`);
+});
+
+// Automatic timeout handling
+contract.on('TimeoutProtectionTriggered', async (contractId) => {
+    console.log(`Gateway timeout - refund available for contract ${contractId}`);
+    await contract.claimTimeoutRefund(contractId);
+});
+```
+
+### 🛡️ Timeout Protection
+
+**What it solves:** Prevents permanent fund locking when Gateway services fail or become unavailable.
+
+**How it works:**
+- **7-day timeout window** for all decryption requests
+- **Automatic detection** of overdue requests
+- **Refund eligibility** for both buyer and seller
+- **Manual override** capabilities for edge cases
+
+**Configuration:**
+```solidity
+uint256 public constant DECRIPTION_TIMEOUT = 7 days; // Configurable
+```
+
+**Usage:**
+```javascript
+// Check if timeout protection can be triggered
+const status = await contract.getContractStatus(contractId);
+if (status.hasPendingDecryption && !status.callbackCompleted) {
+    // Check if timeout period has passed
+    const timeElapsed = Date.now() / 1000 - status.decryptionRequestTime;
+    if (timeElapsed > 7 * 24 * 60 * 60) {
+        await contract.checkTimeoutProtection(contractId);
+        await contract.claimTimeoutRefund(contractId);
+    }
+}
+```
+
+### 💰 Refund Mechanism
+
+**What it solves:** Ensures users can recover their platform stakes even when decryption fails.
+
+**Refund Triggers:**
+1. **Gateway timeout** (7+ days without callback)
+2. **Persistent decryption failures**
+3. **Contract security issues** (emergency scenarios)
+
+**Refund Distribution:**
+- **50/50 split** between buyer and seller
+- **Stake amount** refunded in full
+- **Prevention of double-claiming** with status tracking
+
+```javascript
+// Monitor refund eligibility
+async function checkRefundEligibility(contractId) {
+    const status = await contract.getContractStatus(contractId);
+
+    if (status.canClaimRefund) {
+        console.log(`Refund available: ${ethers.formatEther(status.stakeAmount)} ETH`);
+
+        // Claim refund (splits between both parties automatically)
+        const tx = await contract.claimTimeoutRefund(contractId);
+        await tx.wait();
+
+        console.log('Refund claimed successfully');
+    }
+}
+```
+
+### 🔒 Enhanced Security Features
+
+**Input Validation:**
+- ✅ **Contract value limits** (≤1000 ETH)
+- ✅ **Quantity ranges** (1-1,000,000 tons)
+- ✅ **Address validation** (zero address protection)
+- ✅ **Minimum stake requirements** (≥0.001 ETH)
+
+**Access Control:**
+- ✅ **Role-based permissions** with function-level restrictions
+- ✅ **Contract party validation** for sensitive operations
+- ✅ **Owner-only functions** for administrative tasks
+
+**Overflow Protection:**
+- ✅ **SafeMath-like checks** for arithmetic operations
+- ✅ **Range validation** for user inputs
+- ✅ **Type safety** with Solidity 0.8.24+ built-in protection
+
+```solidity
+// Example security validations
+modifier validContractValue(uint256 _value) {
+    require(_value > 0 && _value <= MAX_CONTRACT_VALUE, "Invalid contract value");
+    _;
+}
+
+modifier notZeroAddress(address _addr) {
+    require(_addr != address(0), "Zero address not allowed");
+    _;
+}
+```
+
+## 📖 Enhanced Documentation
+
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - 🆕 Comprehensive architecture documentation
+- **[API.md](./docs/API.md)** - 🆕 Complete API reference with examples
+- **[TESTING.md](./TESTING.md)** - Complete testing documentation (900+ lines)
+- **[SECURITY_PERFORMANCE.md](./SECURITY_PERFORMANCE.md)** - Security & performance guide (15,000+ words)
 
 ## 📈 Gas Optimization
 
